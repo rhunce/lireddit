@@ -6,7 +6,7 @@ import mikroConfig from "./mikro-orm.config";
 const main = async () => {
   const orm = await MikroORM.init(mikroConfig);
   orm.getMigrator().up();
-  
+
 //   const emFork = orm.em.fork(); // <-- create the fork
 //   const post = emFork.create(Post, { // <-- use the fork instead of global `orm.em`
 //     title: "my first post",
@@ -16,6 +16,7 @@ const main = async () => {
 //   const posts = await emFork.find(Post, {});
 //   console.log("POSTS") 
 //   console.log(posts) 
+//   comment for test comit
 };
 
 main().catch((err) => {
