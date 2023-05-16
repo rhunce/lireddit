@@ -6,10 +6,10 @@ export class Post {
   id!: number;
 
   @Property({ type: "date" })
-  createdAt? = new Date();
+  createdAt?: Date = new Date();
 
   @Property({ type: "date", onUpdate: () => new Date() })
-  updatedAt? = new Date();
+  updatedAt?: Date = new Date();
 
   @Property({ type: "text" })
   title!: string;
