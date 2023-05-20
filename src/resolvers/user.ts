@@ -100,6 +100,7 @@ export class UserResolver {
     // store user id session
     // this will set a cookie on the user
     // keeping them logged in
+    // See sessions.txt in root directory
     req.session.userId = user.id;
 
     return { user };
@@ -137,6 +138,7 @@ export class UserResolver {
     // store user id session
     // this will set a cookie on the user
     // keeping them logged in
+    // See sessions.txt in root directory
     req.session.userId = user.id;
 
     return { user };
