@@ -13,6 +13,7 @@ import session from "express-session";
 import { createClient } from "redis";
 import { MyContext } from "./types";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+import cors from "cors";
 
 const main = async () => {
   const orm = await MikroORM.init(mikroConfig);
@@ -33,6 +34,13 @@ const main = async () => {
   });
 
   // MIDDLEWARE
+  app.use(
+    cors({
+      origin: "http://localhost:3001",
+      credentials: true,
+    })
+  );
+
   // Initialize Redis session storage.
   app.use(
     session({
@@ -67,7 +75,7 @@ const main = async () => {
     ],
   });
   await apolloServer.start();
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({ app, cors: false });
 
   app.listen(3000, () => console.log("Listening on localhost:3000"));
 };
