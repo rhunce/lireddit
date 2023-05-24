@@ -11,6 +11,8 @@ import {
   Query,
 } from "type-graphql";
 import argon2 from "argon2";
+// NOTE: Alternative to using persistAndFlush
+// import { EntityManager } from "@mikro-orm/postgresql";
 
 @InputType()
 class UsernamePasswordInput {
@@ -81,8 +83,22 @@ export class UserResolver {
       password: hashedPassword,
     });
 
+    // NOTE: Alternative to using persistAndFlush
+    // let user;
     try {
       await em.persistAndFlush(user);
+      // NOTE: Alternative to using persistAndFlush
+      // const result = await (em as EntityManager)
+      //   .createQueryBuilder(User)
+      //   .getKnexQuery()
+      //   .insert({
+      //     username: options.username,
+      //     password: hashedPassword,
+      //     created_at: new Date(),
+      //     updated_at: new Date(),
+      //   })
+      //   .returning("*");
+      // user = result[0];
     } catch (err) {
       // duplicate user
       if (err.code === "23505" || err.detail.includes("already exists")) {
@@ -90,7 +106,7 @@ export class UserResolver {
           errors: [
             {
               field: "username",
-              message: "username already taken",
+              message: "Username already taken",
             },
           ],
         };
