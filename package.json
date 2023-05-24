@@ -4,7 +4,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "gen": "gql-gen --config codegen.yml"
+    "codegen": "gql-gen --config codegen.yml"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.2",
