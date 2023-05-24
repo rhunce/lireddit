@@ -1,14 +1,24 @@
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider } from "@chakra-ui/react";
+import theme from "../theme";
+import { AppProps } from "next/app";
+import { Client, Provider, cacheExchange, fetchExchange } from "urql";
 
-import theme from '../theme'
-import { AppProps } from 'next/app'
+const client = new Client({
+  url: "http://localhost:3000/graphql",
+  exchanges: [cacheExchange, fetchExchange],
+  fetchOptions: {
+    credentials: "include",
+  },
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider theme={theme}>
-      <Component {...pageProps} />
-    </ChakraProvider>
-  )
+    <Provider value={client}>
+      <ChakraProvider theme={theme}>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </Provider>
+  );
 }
 
-export default MyApp
+export default MyApp;
