@@ -9,8 +9,6 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [{ data, fetching }] = useMeQuery();
   let body;
 
-  console.log("DATA: ", data);
-
   //   data is loading
   if (fetching) {
     body = null;

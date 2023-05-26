@@ -10,6 +10,7 @@ import {
   RegisterMutation,
 } from "../generated/graphql";
 
+// Helper function to help cast the types for Mutation methods in cacheExchange
 function betterUpdateQuery<Result, Query>(
   cache: Cache,
   qi: QueryInput,
@@ -28,33 +29,33 @@ const client = new Client({
     cacheExchange({
       updates: {
         Mutation: {
-          login: (res, _args, cache, _info) => {
+          login: (mutationResult, _args, cache, _info) => {
             betterUpdateQuery<LoginMutation, MeQuery>(
               cache,
               { query: MeDocument },
-              res,
-              (result, query) => {
-                if (result.login.errors) {
+              mutationResult,
+              (mutResult, query) => {
+                if (mutResult.login.errors) {
                   return query;
                 } else {
                   return {
-                    me: result.login.user,
+                    me: mutResult.login.user,
                   };
                 }
               }
             );
           },
-          register: (res, _args, cache, _info) => {
+          register: (mutationResult, _args, cache, _info) => {
             betterUpdateQuery<RegisterMutation, MeQuery>(
               cache,
               { query: MeDocument },
-              res,
-              (result, query) => {
-                if (result.register.errors) {
+              mutationResult,
+              (mutResult, query) => {
+                if (mutResult.register.errors) {
                   return query;
                 } else {
                   return {
-                    me: result.register.user,
+                    me: mutResult.register.user,
                   };
                 }
               }
