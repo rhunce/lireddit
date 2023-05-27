@@ -1,90 +1,13 @@
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, CSSReset } from "@chakra-ui/react";
 import theme from "../theme";
 import { AppProps } from "next/app";
-import { Client, Provider, fetchExchange } from "urql";
-import { QueryInput, cacheExchange, Cache } from "@urql/exchange-graphcache";
-import {
-  LoginMutation,
-  LogoutMutation,
-  MeDocument,
-  MeQuery,
-  RegisterMutation,
-} from "../generated/graphql";
-
-// Helper function to help cast the types for Mutation methods in cacheExchange
-function betterUpdateQuery<Result, Query>(
-  cache: Cache,
-  qi: QueryInput,
-  result: any,
-  fn: (r: Result, q: Query) => Query
-) {
-  return cache.updateQuery(qi, (data) => fn(result, data as any) as any);
-}
-
-const client = new Client({
-  url: "http://localhost:3000/graphql",
-  fetchOptions: {
-    credentials: "include",
-  },
-  exchanges: [
-    cacheExchange({
-      updates: {
-        Mutation: {
-          login: (mutationResult, _args, cache, _info) => {
-            betterUpdateQuery<LoginMutation, MeQuery>(
-              cache,
-              { query: MeDocument },
-              mutationResult,
-              (mutResult, query) => {
-                if (mutResult.login.errors) {
-                  return query;
-                } else {
-                  return {
-                    me: mutResult.login.user,
-                  };
-                }
-              }
-            );
-          },
-          register: (mutationResult, _args, cache, _info) => {
-            betterUpdateQuery<RegisterMutation, MeQuery>(
-              cache,
-              { query: MeDocument },
-              mutationResult,
-              (mutResult, query) => {
-                if (mutResult.register.errors) {
-                  return query;
-                } else {
-                  return {
-                    me: mutResult.register.user,
-                  };
-                }
-              }
-            );
-          },
-
-          logout: (mutationResult, _args, cache, _info) => {
-            betterUpdateQuery<LogoutMutation, MeQuery>(
-              cache,
-              { query: MeDocument },
-              mutationResult,
-              () => ({ me: null })
-            );
-          },
-        },
-      },
-    }),
-    fetchExchange,
-  ],
-});
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Provider value={client}>
-      <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
-      </ChakraProvider>
-    </Provider>
+    <ChakraProvider theme={theme}>
+      <CSSReset />
+      <Component {...pageProps} />
+    </ChakraProvider>
   );
 }
 
