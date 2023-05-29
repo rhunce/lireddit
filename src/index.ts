@@ -10,7 +10,7 @@ import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
 import RedisStore from "connect-redis";
 import session from "express-session";
-import { createClient } from "redis";
+import Redis from "ioredis";
 import { MyContext } from "./types";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import cors from "cors";
@@ -24,12 +24,12 @@ const main = async () => {
 
   // REDIS CONNECTION (for session authentication)
   // Initialize Redis client.
-  const redisClient = createClient();
-  redisClient.connect().catch(console.error);
+  const redis = new Redis();
+  redis.connect().catch(console.error);
 
   // Initialize Redis store.
   const redisStore = new RedisStore({
-    client: redisClient,
+    client: redis,
     disableTouch: true,
   });
 
@@ -64,7 +64,12 @@ const main = async () => {
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }: MyContext): MyContext => ({ em: fork, req, res }),
+    context: ({ req, res }: MyContext): MyContext => ({
+      em: fork,
+      req,
+      res,
+      redis,
+    }),
     // TODO: This plugin is deprecated. Implement non-deprecated solution.
     // Stack Overflow where this plugin solution came from and where non-deprecated solutions are referenced:
     // https://stackoverflow.com/questions/69333408/express-session-does-not-set-cookie
