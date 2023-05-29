@@ -44,6 +44,7 @@ const Register: React.FC<RegisterProps> = ({}) => {
                 name={"email"}
                 placeholder={"email"}
                 label={"Email"}
+                type="email"
               />
             </Box>
             <Box mt={4}>
