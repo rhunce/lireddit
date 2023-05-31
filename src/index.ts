@@ -1,7 +1,5 @@
 import "reflect-metadata";
-import { MikroORM } from "@mikro-orm/core";
 import { COOKIE_NAME, __prod__ } from "./constants";
-import mikroConfig from "./mikro-orm.config";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
@@ -14,11 +12,29 @@ import Redis from "ioredis";
 import { MyContext } from "./types";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import cors from "cors";
+import { DataSource } from "typeorm";
+import { Post } from "./entities/Post";
+import { User } from "./entities/User";
+
+export const appDataSource = new DataSource({
+  type: "postgres",
+  database: "lireddit2",
+  username: "postgres",
+  password: "postgres",
+  logging: true,
+  synchronize: true,
+  entities: [Post, User],
+});
 
 const main = async () => {
-  const orm = await MikroORM.init(mikroConfig);
-  orm.getMigrator().up();
-  const fork = orm.em.fork();
+  appDataSource
+    .initialize()
+    .then(() => {
+      console.log("Data Source has been initialized!");
+    })
+    .catch((err) => {
+      console.error("Error during Data Source initialization", err);
+    });
 
   const app = express();
 
@@ -65,7 +81,6 @@ const main = async () => {
       validate: false,
     }),
     context: ({ req, res }: MyContext): MyContext => ({
-      em: fork,
       req,
       res,
       redis,
