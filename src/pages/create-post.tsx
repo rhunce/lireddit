@@ -6,9 +6,12 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { useRouter } from "next/router";
 import { Layout } from "../components/Layout";
+import React from "react";
+import { useIsAuth } from "../utils/useIsAuth";
 
 const CreatePost: React.FC<{}> = ({}) => {
   const router = useRouter();
+  useIsAuth();
   const [{}, createPost] = useCreatePostMutation();
 
   return (
@@ -17,8 +20,10 @@ const CreatePost: React.FC<{}> = ({}) => {
         initialValues={{ title: "", text: "" }}
         onSubmit={async (values) => {
           const { title, text } = values;
-          await createPost({ input: { title, text } });
-          router.push("/");
+          const { error } = await createPost({ input: { title, text } });
+          if (!error) {
+            router.push("/");
+          }
         }}
       >
         {({ isSubmitting }) => (
