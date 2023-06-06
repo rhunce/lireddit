@@ -85,6 +85,7 @@ export type Post = {
   points: Scalars['Float']['output'];
   /** Body of Post. */
   text: Scalars['String']['output'];
+  textSnippet: Scalars['String']['output'];
   /** Title of Post. */
   title: Scalars['String']['output'];
   /** When Post was updated. */
@@ -200,7 +201,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: number, title: string, createdAt: string, updatedAt: string }> };
+export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: number, title: string, createdAt: string, updatedAt: string, textSnippet: string }> };
 
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
@@ -311,6 +312,7 @@ export const PostsDocument = gql`
     title
     createdAt
     updatedAt
+    textSnippet
   }
 }
     `;
