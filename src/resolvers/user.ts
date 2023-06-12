@@ -8,6 +8,8 @@ import {
   Field,
   ObjectType,
   Query,
+  FieldResolver,
+  Root,
 } from "type-graphql";
 import argon2 from "argon2";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
@@ -34,8 +36,18 @@ class UserResponse {
   user?: User;
 }
 
-@Resolver()
+@Resolver(User)
 export class UserResolver {
+  @FieldResolver(() => String)
+  email(@Root() user: User, @Ctx() { req }: MyContext) {
+    // This is the current user and it's okay to show then their own email address
+    if (req.session.userId === user.id) {
+      return user.email;
+    }
+    // Current user wants to see someone else's email address
+    return "";
+  }
+
   @Query(() => User, { nullable: true })
   me(@Ctx() { req }: MyContext) {
     // user not logged in
