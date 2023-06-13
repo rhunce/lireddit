@@ -7,8 +7,10 @@ import {
   UpdateDateColumn,
   BaseEntity,
   ManyToOne,
+  OneToMany,
 } from "typeorm";
 import { User } from "./User";
+import { Upvote } from "./Upvote";
 
 @ObjectType()
 @Entity()
@@ -44,4 +46,7 @@ export class Post extends BaseEntity {
   @Field(() => String, { description: "When Post was updated." })
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => Upvote, (upvote) => upvote.post)
+  upvotes: Upvote[];
 }

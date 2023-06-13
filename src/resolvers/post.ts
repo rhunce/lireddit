@@ -134,4 +134,33 @@ export class PostResolver {
     Post.delete({ id });
     return true;
   }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async vote(
+    @Arg("postId", () => Int) postId: number,
+    @Arg("value", () => Int) value: number,
+    @Ctx() { req }: MyContext
+  ) {
+    const isUpvote = value !== -1;
+    const realValue = isUpvote ? 1 : -1;
+    const { userId } = req.session;
+
+    await appDataSource.query(
+      `
+        START TRANSACTION;
+
+        insert into upvote ("userId", "postId", value)
+        values (${userId},${postId},${realValue});
+
+        update post
+        set points = points + ${realValue}
+        where id = ${postId};
+
+        COMMIT;
+      `
+    );
+
+    return true;
+  }
 }

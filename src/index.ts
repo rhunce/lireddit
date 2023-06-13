@@ -16,6 +16,7 @@ import { DataSource } from "typeorm";
 import { Post } from "./entities/Post";
 import { User } from "./entities/User";
 import path from "path";
+import { Upvote } from "./entities/Upvote";
 
 export const appDataSource = new DataSource({
   type: "postgres",
@@ -25,7 +26,7 @@ export const appDataSource = new DataSource({
   logging: true,
   synchronize: true,
   migrations: [path.join(__dirname, "./migrations/*")],
-  entities: [Post, User],
+  entities: [Post, User, Upvote],
 });
 
 const main = async () => {
