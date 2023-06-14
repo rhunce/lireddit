@@ -16,6 +16,7 @@ import { Post } from "../entities/Post";
 import { MyContext } from "../types";
 import { isAuth } from "../middleware/isAuth";
 import { appDataSource } from "../";
+import { Upvote } from "../entities/Upvote";
 
 @InputType()
 class PostInput {
@@ -146,20 +147,49 @@ export class PostResolver {
     const realValue = isUpvote ? 1 : -1;
     const { userId } = req.session;
 
-    await appDataSource.query(
-      `
-        START TRANSACTION;
+    const vote = await Upvote.findOne({ where: { postId, userId } });
 
-        insert into upvote ("userId", "postId", value)
-        values (${userId},${postId},${realValue});
+    // the user has voted on the post before
+    if (vote && vote.value !== realValue) {
+      await appDataSource.transaction(async (tm) => {
+        await tm.query(
+          `
+            update upvote
+            set value = $1
+            where "postId" = $2 and "userId" = $3
+          `,
+          [realValue, postId, userId]
+        );
+        await tm.query(
+          `
+            update post
+            set points = points + $1
+            where id = $2
+          `,
+          [realValue * 2, postId]
+        );
+      });
 
-        update post
-        set points = points + ${realValue}
-        where id = ${postId};
-
-        COMMIT;
-      `
-    );
+      // has never voted on post before
+    } else if (!vote) {
+      await appDataSource.transaction(async (tm) => {
+        await tm.query(
+          `
+            insert into upvote ("userId", "postId", value)
+            values ($1, $2, $3);
+          `,
+          [userId, postId, realValue]
+        );
+        await tm.query(
+          `
+            update post
+            set points = points + $1
+            where id = $2
+          `,
+          [realValue, postId]
+        );
+      });
+    }
 
     return true;
   }
