@@ -23,6 +23,9 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
     >
       <IconButton
         onClick={async () => {
+          if (post.voteStatus === 1) {
+            return;
+          }
           setLoadingState("upvote-loading");
           await vote({
             postId: post.id,
@@ -30,6 +33,7 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
           });
           setLoadingState("not-loading");
         }}
+        colorScheme={post.voteStatus === 1 ? "green" : undefined}
         isLoading={loadingState === "upvote-loading"}
         aria-label="Upvote post"
         icon={<ChevronUpIcon />}
@@ -37,6 +41,9 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
       {post.points}
       <IconButton
         onClick={async () => {
+          if (post.voteStatus === -1) {
+            return;
+          }
           setLoadingState("downvote-loading");
           await vote({
             postId: post.id,
@@ -44,6 +51,7 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
           });
           setLoadingState("not-loading");
         }}
+        colorScheme={post.voteStatus === -1 ? "red" : undefined}
         isLoading={loadingState === "downvote-loading"}
         aria-label="Downvote post"
         icon={<ChevronDownIcon />}

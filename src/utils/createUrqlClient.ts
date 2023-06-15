@@ -5,10 +5,12 @@ import {
   MeDocument,
   RegisterMutation,
   LogoutMutation,
+  VoteMutationVariables,
 } from "../generated/graphql";
 import { Resolver, cacheExchange } from "@urql/exchange-graphcache";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import Router from "next/router";
+import { gql } from "@urql/core";
 
 // NOTE: Modified for cursor-based pagination from simplePagination at
 // https://github.com/urql-graphql/urql/blob/main/exchanges/graphcache/src/extras/simplePagination.ts
@@ -65,6 +67,38 @@ export const createUrqlClient = (ssrExchange: any) => ({
       },
       updates: {
         Mutation: {
+          vote: (_mutationResult, args, cache, _info) => {
+            const { postId, value } = args as VoteMutationVariables;
+
+            const data = cache.readFragment(
+              gql`
+                fragment _ on Post {
+                  id
+                  points
+                  voteStatus
+                }
+              `,
+              { id: postId }
+            ) as { id: number; points: number; voteStatus: number | null };
+
+            if (data) {
+              if (data.voteStatus === value) {
+                return;
+              }
+              const newPoints =
+                data.points + (!data.voteStatus ? 1 : 2) * value;
+
+              cache.writeFragment(
+                gql`
+                  fragment _ on Post {
+                    points
+                    voteStatus
+                  }
+                `,
+                { id: postId, points: newPoints, voteStatus: value }
+              );
+            }
+          },
           createPost: (_mutationResult, _args, cache, _info) => {
             const allFields = cache.inspectFields("Query");
             const fieldInfos = allFields.filter(
