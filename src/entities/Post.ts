@@ -1,4 +1,4 @@
-import { ObjectType, Field } from "type-graphql";
+import { ObjectType, Field, Int } from "type-graphql";
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -30,6 +30,9 @@ export class Post extends BaseEntity {
   @Field({ description: "Post total points (sum of upvotes and downvotes)." })
   @Column({ type: "integer", default: 0 })
   points!: number;
+
+  @Field(() => Int, { nullable: true })
+  voteStatus: number | null; // 1 or -1 or null
 
   @Field({ description: "ID of the User that created the Post." })
   @Column()
