@@ -3,6 +3,7 @@ import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useRouter } from "next/router";
 import { usePostQuery } from "../../generated/graphql";
 import { Layout } from "../../components/Layout";
+import { Box, Heading } from "@chakra-ui/react";
 
 const Post = ({}) => {
   const router = useRouter();
@@ -20,7 +21,7 @@ const Post = ({}) => {
   if (fetching) {
     return (
       <Layout>
-        <div>Loading...</div>
+        <Box>Loading...</Box>
       </Layout>
     );
   }
@@ -28,12 +29,25 @@ const Post = ({}) => {
   if (error) {
     return (
       <Layout>
-        <div>{error.message}</div>
+        <Box>{error.message}</Box>
       </Layout>
     );
   }
 
-  return <Layout>{data?.post?.text}</Layout>;
+  if (!data?.post) {
+    return (
+      <Layout>
+        <Box>Could not find post</Box>
+      </Layout>
+    );
+  }
+
+  return (
+    <Layout>
+      <Heading mb={4}>{data.post.title}</Heading>
+      {data.post.text}
+    </Layout>
+  );
 };
 
 export default withUrqlClient(createUrqlClient, { ssr: true })(Post);
