@@ -36,13 +36,6 @@ const Index = () => {
 
   return (
     <Layout>
-      <Flex align="center">
-        <Heading>LiReddit</Heading>
-        <Link as={NextLink} href="/create-post" ml="auto">
-          Create Post
-        </Link>
-      </Flex>
-      <br />
       {fetching && !data ? (
         <div>Loading...</div>
       ) : (
