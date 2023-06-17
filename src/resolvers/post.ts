@@ -154,15 +154,20 @@ export class PostResolver {
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: MyContext
   ): Promise<boolean> {
-    const post = await Post.findOneBy({ id });
-    if (!post) {
-      return false;
-    }
-    if (post.creatorId !== req.session.userId) {
-      throw new Error("Not authorized");
-    }
-    await Upvote.delete({ postId: id });
-    await Post.delete({ id });
+    // NOTE: Deleting Upvote from Post (non-cascading approach)
+    // const post = await Post.findOneBy({ id });
+    // if (!post) {
+    //   return false;
+    // }
+    // if (post.creatorId !== req.session.userId) {
+    //   throw new Error("Not authorized");
+    // }
+    // await Upvote.delete({ postId: id });
+    // await Post.delete({ id });
+
+    // NOTE: Deleting Upvote from Post
+    // Leveraging cascading option on post field of Upvote entity
+    await Post.delete({ id, creatorId: req.session.userId });
     return true;
   }
 
