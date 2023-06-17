@@ -6,6 +6,7 @@ import {
   RegisterMutation,
   LogoutMutation,
   VoteMutationVariables,
+  DeletePostMutationVariables,
 } from "../generated/graphql";
 import { Resolver, cacheExchange } from "@urql/exchange-graphcache";
 import { betterUpdateQuery } from "./betterUpdateQuery";
@@ -75,6 +76,12 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
         },
         updates: {
           Mutation: {
+            deletePost: (_mutationResult, args, cache, _info) => {
+              cache.invalidate({
+                __typename: "Post",
+                id: (args as DeletePostMutationVariables).id,
+              });
+            },
             vote: (_mutationResult, args, cache, _info) => {
               const { postId, value } = args as VoteMutationVariables;
 
