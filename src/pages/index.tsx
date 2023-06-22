@@ -23,7 +23,7 @@ const Index = () => {
   });
 
   const [{ data: meData }] = useMeQuery();
-  const [{ data, fetching }] = usePostsQuery({
+  const [{ data, fetching, error }] = usePostsQuery({
     variables,
   });
 
@@ -32,6 +32,7 @@ const Index = () => {
       <div>
         You either have no posts or something went wrong with your query for
         some reason...
+        <div>{error?.message}</div>
       </div>
     );
   }
