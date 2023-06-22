@@ -17,6 +17,7 @@ import { Post } from "./entities/Post";
 import { User } from "./entities/User";
 import path from "path";
 import { Upvote } from "./entities/Upvote";
+import { createUserLoader } from "./utils/createUserLoader";
 
 export const appDataSource = new DataSource({
   type: "postgres",
@@ -88,6 +89,7 @@ const main = async () => {
       req,
       res,
       redis,
+      userLoader: createUserLoader(),
     }),
     // TODO: This plugin is deprecated. Implement non-deprecated solution.
     // Stack Overflow where this plugin solution came from and where non-deprecated solutions are referenced:
