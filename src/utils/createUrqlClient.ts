@@ -8,7 +8,7 @@ import {
   VoteMutationVariables,
   DeletePostMutationVariables,
 } from "../generated/graphql";
-import { Resolver, cacheExchange } from "@urql/exchange-graphcache";
+import { Resolver, cacheExchange, Cache } from "@urql/exchange-graphcache";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import Router from "next/router";
 import { gql } from "@urql/core";
@@ -50,6 +50,14 @@ const cursorPagination = (): Resolver => {
       posts: results,
     };
   };
+};
+
+const invalidateAllPosts = (cache: Cache) => {
+  const allFields = cache.inspectFields("Query");
+  const fieldInfos = allFields.filter((info) => info.fieldName === "posts");
+  fieldInfos.forEach((fi) => {
+    cache.invalidate("Query", "posts", fi.arguments || {});
+  });
 };
 
 export const createUrqlClient = (ssrExchange: any, ctx: any) => {
@@ -115,13 +123,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
               }
             },
             createPost: (_mutationResult, _args, cache, _info) => {
-              const allFields = cache.inspectFields("Query");
-              const fieldInfos = allFields.filter(
-                (info) => info.fieldName === "posts"
-              );
-              fieldInfos.forEach((fi) => {
-                cache.invalidate("Query", "posts", fi.arguments || {});
-              });
+              invalidateAllPosts(cache);
             },
             login: (mutationResult, _args, cache, _info) => {
               betterUpdateQuery<LoginMutation, MeQuery>(
@@ -138,6 +140,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                   }
                 }
               );
+              invalidateAllPosts(cache);
             },
             register: (mutationResult, _args, cache, _info) => {
               betterUpdateQuery<RegisterMutation, MeQuery>(
