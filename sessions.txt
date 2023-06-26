@@ -1,0 +1,25 @@
+When this is done: req.session.userId = user.id
+{ userId: 1 } -> gets sent to redis
+
+1
+Redis sets up a key:value pair
+key                     value
+sess:ytujtvuvtyytifi -> { userId: 1 }
+
+2
+express-session will set a cookie on my browser: gyutewayrtdtyijlinojghfuswaeadhy
+cookie is signed version of the key in redis
+
+3
+when user makes a request
+gyutewayrtdtyijlinojghfuswaeadhy -> sent to the server
+
+4
+gyutewayrtdtyijlinojghfuswaeadhy gets unsigned (decrypted) using the secret in index.ts
+
+5
+makes a request to redis using decrypted cookie
+sess:ytujtvuvtyytifi -> { userId: 1 }
+
+6 
+Finally, stores { userId: 1 } property in req.session
