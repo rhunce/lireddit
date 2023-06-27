@@ -193,6 +193,7 @@ export class UserResolver {
 
     sendEmail(
       email,
+      // NOTE: Won't work in production until real email provider set up to send emails
       `<a href="${process.env.CORS_ORIGIN}/change-password/${token}">reset password</a>`
     );
     return true;

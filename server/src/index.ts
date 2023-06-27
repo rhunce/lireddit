@@ -29,7 +29,7 @@ export const appDataSource = new DataSource({
   // NOTE: url used in place of database, username, and password, above
   url: process.env.DATABASE_URL,
   logging: true,
-  synchronize: true,
+  // synchronize: true,
   migrations: [path.join(__dirname, "./migrations/*")],
   entities: [Post, User, Upvote],
 });
@@ -39,7 +39,7 @@ const main = async () => {
     .initialize()
     .then(() => {
       console.log("Data Source has been initialized!");
-      appDataSource.runMigrations();
+      // appDataSource.runMigrations();
     })
     .catch((err) => {
       console.error("Error during Data Source initialization", err);
@@ -59,6 +59,9 @@ const main = async () => {
   });
 
   // MIDDLEWARE
+  // NOTE: Tells Express we have 1 proxy sitting in front (NGINX, since Dokku is built on NGINX)
+  // This way our cookies, sessions, etc..., will all still work in Production
+  app.set("proxy", 1);
   app.use(
     cors({
       origin: process.env.CORS_ORIGIN,
