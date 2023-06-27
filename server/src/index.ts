@@ -81,8 +81,7 @@ const main = async () => {
         secure: __prod__, // cookie only works in https if true
         // NOTE: May experience cookie issues where during SSR, cookie not getting forwarded
         // To resolve, specify a domain and set up a custom domain
-        // Replace codeponder with <my domain>
-        // domain: __prod__ ? ".codeponder.com" : undefined,
+        domain: __prod__ ? ".rhunce.com" : undefined,
       },
       saveUninitialized: false, // recommended: only save session when data exists
       secret: process.env.SESSION_SECRET,
