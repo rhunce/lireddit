@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import "dotenv-safe/config";
 import { COOKIE_NAME, __prod__ } from "./constants";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
@@ -22,9 +23,11 @@ import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 
 export const appDataSource = new DataSource({
   type: "postgres",
-  database: "lireddit2",
-  username: "postgres",
-  password: "postgres",
+  // database: "lireddit2",
+  // username: "postgres",
+  // password: "postgres",
+  // NOTE: url used in place of database, username, and password, above
+  url: process.env.DATABASE_URL,
   logging: true,
   synchronize: true,
   migrations: [path.join(__dirname, "./migrations/*")],
@@ -46,7 +49,7 @@ const main = async () => {
 
   // REDIS CONNECTION (for session authentication)
   // Initialize Redis client.
-  const redis = new Redis();
+  const redis = new Redis(process.env.REDIS_URL);
   redis.connect().catch(console.error);
 
   // Initialize Redis store.
@@ -58,7 +61,7 @@ const main = async () => {
   // MIDDLEWARE
   app.use(
     cors({
-      origin: "http://localhost:3001",
+      origin: process.env.CORS_ORIGIN,
       credentials: true,
     })
   );
@@ -73,9 +76,13 @@ const main = async () => {
         httpOnly: true, // can't access cookie in frontend javascript code
         sameSite: "lax", // csrf
         secure: __prod__, // cookie only works in https if true
+        // NOTE: May experience cookie issues where during SSR, cookie not getting forwarded
+        // To resolve, specify a domain and set up a custom domain
+        // Replace codeponder with <my domain>
+        // domain: __prod__ ? ".codeponder.com" : undefined,
       },
       saveUninitialized: false, // recommended: only save session when data exists
-      secret: "hvfxdhxchjkbouyfirtyuhkbl",
+      secret: process.env.SESSION_SECRET,
       resave: false, // required: force lightweight session keep alive (touch)
     })
   );
@@ -105,7 +112,9 @@ const main = async () => {
   await apolloServer.start();
   apolloServer.applyMiddleware({ app, cors: false });
 
-  app.listen(3000, () => console.log("Listening on localhost:3000"));
+  app.listen(parseInt(process.env.PORT), () =>
+    console.log(`Listening on localhost:${process.env.PORT}`)
+  );
 };
 
 main().catch((err) => {
