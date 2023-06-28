@@ -24,3 +24,8 @@ ENV NODE_ENV production
 EXPOSE 8080
 CMD [ "node", "dist/index.js" ]
 
+# By default, Docker runs commands inside the container as root which violates the 
+# Principle of Least Privilege (PoLP) when superuser permissions are not strictly 
+# required. You want to run the container as an unprivileged user whenever possible. 
+# The node images provide the node user for such purpose.
+USER node
