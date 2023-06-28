@@ -61,7 +61,7 @@ const main = async () => {
   // MIDDLEWARE
   // NOTE: Tells Express we have 1 proxy sitting in front (NGINX, since Dokku is built on NGINX)
   // This way our cookies, sessions, etc..., will all still work in Production
-  app.set("proxy", 1);
+  app.set("trust proxy", 1);
   app.use(
     cors({
       origin: process.env.CORS_ORIGIN,
