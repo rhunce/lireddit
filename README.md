@@ -121,25 +121,25 @@ To get a local copy up and running, follow these steps.
 4. In your terminal, from the `server` directory, run
 
 ```
-$ npm run watch
+npm run watch
 ```
 
 5. In another terminal, from the `server` directory, run
 
 ```
-$ npm run dev
+npm run dev
 ```
 
 6. In another terminal, from the `web` directory, run
 
 ```
-$ npm run codegen
+npm run codegen
 ```
 
 7. In the same terminal, from the `web` directory, run
 
 ```
-$ npm run dev
+npm run dev
 ```
 
 Open up the project locally in your browser and start developing!
