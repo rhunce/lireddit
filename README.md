@@ -191,12 +191,12 @@ GitHub Project Link: [https://github.com/rhunce/raddit](https://github.com/rhunc
 
 <!-- DigitalOcean -->
 
-[DigitalOcean]: https://img.shields.io/badge/digitalocean-fff?style=for-the-badge&logo=digitalocean&logoColor=blue
+[DigitalOcean]: https://img.shields.io/badge/digitalocean-d7d7d7?style=for-the-badge&logo=digitalocean&logoColor=blue
 [DIgitalOcean-url]: https://www.digitalocean.com/
 
 <!-- Docker -->
 
-[Docker]: https://img.shields.io/badge/docker-white?style=for-the-badge&logo=docker&logoColor=blue
+[Docker]: https://img.shields.io/badge/docker-d7d7d7?style=for-the-badge&logo=docker&logoColor=blue
 [Docker-url]: https://www.docker.com/
 
 <!-- TypeScript -->
@@ -216,10 +216,10 @@ GitHub Project Link: [https://github.com/rhunce/raddit](https://github.com/rhunc
 
 <!-- PostgreSQL -->
 
-[PostgreSQL]: https://img.shields.io/badge/postgresql-white?style=for-the-badge&logo=postgresql&logoColor=4169E1
+[PostgreSQL]: https://img.shields.io/badge/postgresql-d7d7d7?style=for-the-badge&logo=postgresql&logoColor=4169E1
 [PostgreSQL-url]: https://www.postgresql.org/
 
 <!-- Redis -->
 
-[Redis]: https://img.shields.io/badge/redis-white?style=for-the-badge&logo=redis&logoColor=DC382D
+[Redis]: https://img.shields.io/badge/redis-d7d7d7?style=for-the-badge&logo=redis&logoColor=DC382D
 [Redis-url]: https://redis.com/
