@@ -31,7 +31,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     // user not logged in
   } else if (!data?.me) {
     body = (
-      <>
+      <Flex align="center">
         <Link as={NextLink} href="/login" mr={2}>
           Login
         </Link>
@@ -39,7 +39,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
           Register
         </Link>
         <DarkModeToggle />
-      </>
+      </Flex>
     );
 
     // user is logged in
