@@ -2,7 +2,8 @@
 
 ## About
 
-![Raddit Project Screen Shot](images/screenshot.png)
+![Raddit Project Screen Shot](images/lightmode.png)
+![Raddit Project Screen Shot](images/darkmode.png)
 
 This project is a fullstack application that is basically a lightweight version of Reddit.
 
@@ -13,7 +14,7 @@ Basic functionality includes registering, logging in and out, session storage, c
 ## Future Roadmap
 
 - [ ] Improve styling
-- [ ] Add Dark Mode functionality
+- [x] ~~Add Dark Mode functionality~~
 - [ ] Create Raddit Categories
   - [ ] Relate messages to Categories
 - [ ] Implement message filtering

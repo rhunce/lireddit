@@ -4,6 +4,7 @@ import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
+import { DarkModeToggle } from "./DarkModeToggle";
 
 interface NavBarProps {}
 
@@ -37,6 +38,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         <Link as={NextLink} href="/register">
           Register
         </Link>
+        <DarkModeToggle />
       </>
     );
 
@@ -58,6 +60,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         >
           Logout
         </Button>
+        <DarkModeToggle />
       </Flex>
     );
   }
