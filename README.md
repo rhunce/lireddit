@@ -145,10 +145,6 @@ npm run dev
 
 Open up the project locally in your browser and start developing!
 
-<!-- ROADMAP -->
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
-
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
@@ -162,8 +158,6 @@ Raymond Hunce - hunce18c@gmail.com
 GitHub Project Link: [https://github.com/rhunce/raddit](https://github.com/rhunce/raddit)
 
 [![LinkedIn][linkedin-shield]][linkedin-url]
-
-<!-- MARKDOWN LINKS & IMAGES -->
 
 <!-- License -->
 
