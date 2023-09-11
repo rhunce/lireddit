@@ -23,6 +23,7 @@ Basic functionality includes registering, logging in and out, session storage, c
 - [ ] Implement message threads
 - [ ] Implement User profile page
   - [ ] Allow user to upload avatar
+  - [ ] Show avatar in each Post
 
 ## Project Architecture
 
